@@ -4,7 +4,7 @@ Issue, Milestone, and Task tracker built on NodeJS
 
 ## Goals
 
-### Record Creation (duh!)
+### Record Creation 
 + Types:
   * Issue
   * Task
