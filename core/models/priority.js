@@ -12,7 +12,7 @@ module.exports = function(sequelize, DataTypes) {
             defaultValue: false
         }
     };
-    return sequelize.define('Priority', definition, {
+    return sequelize.define('priority', definition, {
         classMethods: {
             getDefinition: function() {
                 return definition;

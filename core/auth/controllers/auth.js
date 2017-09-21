@@ -41,12 +41,12 @@ exports.authenticate = function authenticate(req, res) {
                 db.Type.findAll({
                     where: {deleted: 0},
                     attributes: ['id', 'name', 'icon']
-                }).complete(next);
+                }).then(function(data){next(null,data)});
             },
             permission: function(next) {
                 db.Permission.findAll({
                     attributes: ['id', 'name', 'uri', 'action']
-                }).complete(next);
+                }).then(function(data){next(null,data)});
             }
         }, function(err, results) {
             if (!err) {
@@ -74,12 +74,12 @@ exports.authenticate = function authenticate(req, res) {
                     ]
                 }],
                 where: { email: email, deleted: 0 }
-            }).complete(next);
+            }).then(function(data){next(null,data)});
         },
         status: function(next) {
             db.Stage.findAll({
                 attributes: ['id', 'name', 'deleted']
-            }).complete(next);
+            }).then(function(data){next(null,data)});
         }
     }, function(err, results) {
         if (!err) {
@@ -130,7 +130,7 @@ exports.sendPassword = function(req, res) {
 };
 exports.register = function(req, res) {
     var params = req.body;
-        params.GroupId = 2;
+        params.groupId = 2;
         params.deleted = 0;
     hash(params.password, function(err, salt, hash){
         if (err) next(err);
@@ -138,10 +138,10 @@ exports.register = function(req, res) {
         params.salt = salt;
         db.User.build(params)
             .save()
-            .success(function(user) {
+            .then(function(user) {
                 res.locals.success = 'Created User: '+ user.name;
                 res.render('../core/auth/views/login', {});
-            }).error(function(err) {
+            }).catch(function(err) {
                 res.locals.error = '';
                 if (err.code && 'ER_DUP_ENTRY' === err.code) res.locals.error = 'There is already another user with email: ' + params.email;
                 else if (err.email && 'Validation contains failed' === err.email[0]) res.locals.error = 'Only emails within domain [' + CONF.app.auth.domain + '] allowed.';

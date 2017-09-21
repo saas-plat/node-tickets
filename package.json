@@ -1,43 +1,48 @@
 {
-    "name" : "NodeBootstrap"
-  , "version"     : "0.5.1"
-  , "description" : "Node/Express.js Template with Twitter Bootstrap2 and other goodies"
-  , "author"      : "Irakli Nadareishvili, John Nelson"
-  , "license" : {
-      "type" : "MIT"
-    , "url"  : "https://github.com/inadarei/nodebootstrap/blob/master/LICENSE"
+  "name": "NodeBootstrap",
+  "version": "0.5.1",
+  "description": "Node/Express.js Template with Twitter Bootstrap2 and other goodies",
+  "author": "Irakli Nadareishvili, John Nelson",
+  "license": {
+    "type": "MIT",
+    "url": "https://github.com/inadarei/nodebootstrap/blob/master/LICENSE"
+  },
+  "main": "./server.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/inadarei/nodebootstrap"
+  },
+  "engines": {
+    "node": ">=0.8.8"
+  },
+  "dependencies": {
+    "async": "*",
+    "body-parser": "^1.18.1",
+    "config": "*",
+    "cookie-parser": "^1.4.3",
+    "downsize": "*",
+    "express": "3.x",
+    "hbs": "2.x",
+    "less": "1.x",
+    "less-middleware": "*",
+    "lodash": "*",
+    "metalogger": "*",
+    "method-override": "^2.3.9",
+    "moment": "*",
+    "mysql": "*",
+    "sequelize": "3.*",
+    "strong-cluster-connect-store": "*",
+    "strong-store-cluster": "^1.0.1",
+    "underscore": "1.x",
+    "yaml": "*"
+  },
+  "devDependencies": {
+    "should": "*",
+    "mocha": "*"
+  },
+  "scripts": {
+    "start": "node server.js --NODE_CONFIG_DIR=./config",
+    "setup": "node install.js --NODE_CONFIG_DIR=./config",
+    "test": "mocha"
   }
-  , "main"        : "./server.js"
-  , "repository"  : {
-      "type" : "git",
-      "url"  : "https://github.com/inadarei/nodebootstrap"
-  }
-  , "engines": {
-      "node": ">=0.8.8"
-  }
-  , "dependencies": {
-      "yaml"               : "*"
-    , "express"            : "3.x"
-    , "config"             : "*"
-    , "hbs"                : "2.x"
-    , "less"               : "1.x"
-    , "less-middleware"    : "*"
-    , "async"              : "*"
-    , "underscore"         : "1.x"
-    , "metalogger"         : "*"
-    , "mysql"              : "*"
-    , "sequelize"          : "2.*"
-    , "lodash"             : "*"
-    , "moment"             : "*"
-    , "downsize"           : "*"
-    , "strong-cluster-connect-store" : "*"
-  }
-  , "devDependencies" : {
-      "should" : "*"
-    , "mocha"  : "*"
-  }
-  , "scripts": {
-    "test" : "mocha"
-  }  
-  
 }

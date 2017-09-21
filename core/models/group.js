@@ -13,14 +13,14 @@ module.exports = function(sequelize, DataTypes) {
             defaultValue: false
         }
     };
-    return sequelize.define('Group', definition, {
+    return sequelize.define('group', definition, {
         classMethods: {
             getDefinition: function() {
                 return definition;
             },
             associate: function(models) {
-                models.Group.hasMany(models.Type, { through: 'Group_access_Types', onDelete: 'cascade', hooks: true });
-                models.Group.hasMany(models.Permission, { through: 'Group_Permissions', onDelete: 'cascade', hooks: true });
+                models.Group.belongsToMany(models.Type, { through: 'Group_access_Types', onDelete: 'cascade', hooks: true });
+                models.Group.belongsToMany(models.Permission, { through: 'Group_Permissions', onDelete: 'cascade', hooks: true });
             }
         }
     });

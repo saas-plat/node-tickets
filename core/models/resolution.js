@@ -12,7 +12,7 @@ module.exports = function(sequelize, DataTypes) {
             defaultValue: false
         }
     };
-    return sequelize.define('Resolution', definition, {
+    return sequelize.define('resolution', definition, {
         classMethods: {
             getDefinition: function() {
                 return definition;

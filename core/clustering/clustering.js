@@ -18,7 +18,7 @@ exports.setup = function() {
   cluster.on('fork', function forkingWorker(worker) {
     log.debug('Forking worker #' + worker.id);
     timeouts[worker.id] = setTimeout(function workerTimingOut() {
-      log.error(['Worker taking too long to start']);
+      log.catch(['Worker taking too long to start']);
     }, 2000);
   });
 
@@ -32,7 +32,7 @@ exports.setup = function() {
   });
 
   cluster.on('exit', function onClusterExit(worker, code, signal) {
-    log.error(['The worker #'+worker.id+' has exited with exitCode ' + worker.process.exitCode]);
+    log.catch(['The worker #'+worker.id+' has exited with exitCode ' + worker.process.exitCode]);
     clearTimeout(timeouts[worker.id]);
     // Don't try to restart the workers when disconnect or destroy has been called
     if(worker.suicide !== true) {

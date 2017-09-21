@@ -36,7 +36,8 @@ var fs          = require('fs'),
     })
     .forEach(function(file) {
         var model = sequelize.import(path.join(__dirname, file))
-        db[model.name] = model
+        var name = model.name[0].toUpperCase()+model.name.substr(1);
+        db[name] = model
     });
 
     Object.keys(db).forEach(function(modelName) {

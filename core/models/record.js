@@ -73,7 +73,7 @@ module.exports = function(sequelize, DataTypes) {
             defaultValue: null
         }
     };
-    return sequelize.define('Record', definition, {
+    return sequelize.define('record', definition, {
         classMethods: {
             getDefinition: function() {
                 return definition;
@@ -85,7 +85,7 @@ module.exports = function(sequelize, DataTypes) {
                 models.Record.belongsTo(models.Priority);
                 models.Record.belongsTo(models.Module);
                 models.Record.belongsTo(models.Stage);
-                models.Record.hasMany(models.User, { through: 'User_assigned_Records', onDelete: 'cascade', hooks: true });
+                models.Record.belongsToMany(models.User, { through: 'User_assigned_Records', onDelete: 'cascade', hooks: true });
             }
         }
     });

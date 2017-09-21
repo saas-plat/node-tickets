@@ -6,7 +6,7 @@ app:
   auth:
     passthrough:
       email: "sys@admin"
-      pass: "cross"
+      pass: "123456"
     domain: "gmail.com"
     bytesize: 128
     iterations: 12000
@@ -25,9 +25,9 @@ db:
   driver: "mysql"
   host: "localhost"
   port: 3306
-  username: ""
-  password: ""
-  database: ""
+  username: "root"
+  password: "123456"
+  database: "issue_db"
   charset: "utf8"
   collate: "utf8_general_ci"
   initialConnections: 1

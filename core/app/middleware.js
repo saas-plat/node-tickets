@@ -25,9 +25,9 @@ exports.ensureAuthenticated = function ensureAuthenticated(req, res, next) {
 };
 
 exports.refreshData = function refreshData(req, res, callback) {
-    if (req.session.user.id) async.auto({
+     async.auto({
         user: function(next) {
-            db.User.find({
+          if (req.session.user.id)  db.User.find({
                 include: [{
                     model: db.Group,
                     include: [
@@ -36,30 +36,31 @@ exports.refreshData = function refreshData(req, res, callback) {
                     ]
                 }],
                 where: { id: req.session.user.id }
-            }).complete(next);
+            }).then(function(data){next(null,data)});
+            else next();
         },
         stage: function(next) {
             db.Stage.findAll({
                 attributes: ['id', 'name']
-            }).complete(next);
+            }).then(function(data){next(null,data)});
         },
         resolution: function(next) {
             db.Resolution.findAll({
                 attributes: ['id', 'name']
-            }).complete(next);
+            }).then(function(data){next(null,data)});
         },
         module: function(next) {
             db.Module.findAll({
                 attributes: ['id', 'name']
-            }).complete(next);
+            }).then(function(data){next(null,data)});
         },
         priority: function(next) {
             db.Priority.findAll({
                 attributes: ['id', 'name']
-            }).complete(next);
+            }).then(function(data){next(null,data)});
         },
         type: function(next) {
-            db.Type.findAll().complete(next);
+            db.Type.findAll().then(function(data){next(null,data)});
         }
     }, function(err, results) {
         if (err) callback(err);
@@ -99,18 +100,18 @@ exports.refreshData = function refreshData(req, res, callback) {
             module: modules,
             priority: priority
         };
-        req.session.user = {
-            id: user.id,
-            email: user.email,
-            name: user.name,
-            deleted: user.deleted,
-            group: user.group.name,
-            groupId: user.group.id,
-            permissions: user.group.permissions,
-            types: user.group.types
-        };
+        if (user){
+          req.session.user = {
+              id: user.id,
+              email: user.email,
+              name: user.name,
+              deleted: user.deleted,
+              group: user.group.name,
+              groupId: user.group.id,
+              permissions: user.group.permissions,
+              types: user.group.types
+          };
+        }
         callback();
     });
-    else callback();
 };
-

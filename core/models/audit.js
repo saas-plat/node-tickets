@@ -27,7 +27,7 @@ module.exports = function(sequelize, DataTypes) {
             defaultValue: null
         }
     };
-    return sequelize.define('Audit', definition,{
+    return sequelize.define('audit', definition,{
         classMethods: {
             getDefinition: function() {
                 return definition;

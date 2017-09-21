@@ -16,13 +16,13 @@ module.exports = function(sequelize, DataTypes) {
             defaultValue: false
         }
     };
-    return sequelize.define('Permission', definition, {
+    return sequelize.define('permission', definition, {
         classMethods: {
             getDefinition: function() {
                 return definition;
             },
             associate: function(models) {
-                models.Permission.hasMany(models.Group, { through: 'Group_Permissions', onDelete: 'cascade', hooks: true });
+                models.Permission.belongsToMany(models.Group, { through: 'Group_Permissions', onDelete: 'cascade', hooks: true });
             }
         }
     });

@@ -10,23 +10,23 @@ exports.showAll = function(req, res) {
         user: function(next) {
             db.User.findAll({
                 include: [db.Group]
-            }).complete(next);
+            }).then(function(data){next(null,data)}).catch(next);
         },
         group: function(next) {
             db.Group.findAll({
                 include: [db.Type,db.Permission]
-            }).complete(next);
+            }).then(function(data){next(null,data)}).catch(next);
         },
         type: function(next) {
             db.Type.findAll({
                 where: {deleted: 0},
                 attributes: ['id', 'name', 'icon']
-            }).complete(next);
+            }).then(function(data){next(null,data)}).catch(next);
         },
         permission: function(next) {
             db.Permission.findAll({
                 attributes: ['id', 'name', 'action']
-            }).complete(next);
+            }).then(function(data){next(null,data)}).catch(next);
         }
     }, function(err, results) {
         if (err) {
@@ -64,7 +64,7 @@ exports.createUser = function(req, res) {
         }
     }, function(err) {
         if (!err) {
-            db.User.build(params).save().success(function(user) {
+            db.User.build(params).save().then(function(user) {
                 if (res.locals.session.user.id) db.Audit.build({
                     action: 'create',
                     UserId: res.locals.session.user.id,
@@ -90,7 +90,7 @@ exports.createUser = function(req, res) {
 
 exports.createGroup = function(req, res) {
     var params = req.body;
-    db.Group.build(params).save().success(function(group){
+    db.Group.build(params).save().then(function(group){
         if (res.locals.session.user.id) db.Audit.build({
             action: 'create',
             UserId: res.locals.session.user.id,
@@ -103,22 +103,22 @@ exports.createGroup = function(req, res) {
                 db.Type.findAll({
                     where: { id: params.types },
                     attributes: ['id']
-                }).complete(next);
+                }).then(function(data){next(null,data)}).catch(next);
             },
             permission: function(next) {
                 db.Permission.findAll({
                     where: { id: params.permissions },
                     attributes: ['id']
-                }).complete(next);
+                }).then(function(data){next(null,data)}).catch(next);
             }
         }, function(err, results) {
             if (!err) {
-                group.setTypes(results.type).success(function(){
-                    group.setPermissions(results.permission).success(function(){
+                group.setTypes(results.type).then(function(){
+                    group.setPermissions(results.permission).then(function(){
                         db.Group.find({
                             where: { id: group.id },
                             include: [db.Type,db.Permission]
-                        }).success(function(savedGroup){
+                        }).then(function(savedGroup){
                             req.session.success = 'Created Group: ' + savedGroup.name;
                             res.redirect('/admin/index');
                         });
@@ -126,7 +126,7 @@ exports.createGroup = function(req, res) {
                 });
             }
         });
-    }).error(function(err) {
+    }).catch(function(err) {
         req.session.error = '';
         if (err.code && 'ER_DUP_ENTRY' === err.code) req.session.error = 'There is already another ' + params.name + ' group';
         else if (err) _.forEach(err,function(v,k){

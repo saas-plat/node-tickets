@@ -33,14 +33,14 @@ module.exports = function(sequelize, DataTypes) {
             defaultValue: false
         }
     };
-    return sequelize.define('User', definition,{
+    return sequelize.define('user', definition,{
         classMethods: {
             getDefinition: function() {
                 return definition;
             },
             associate: function(models) {
                 models.User.belongsTo(models.Group);
-                models.User.hasMany(models.Record, { through: 'User_assigned_Records', onDelete: 'cascade', hooks: true });
+                models.User.belongsToMany(models.Record, { through: 'User_assigned_Records', onDelete: 'cascade', hooks: true });
             }
         }
     });

@@ -10,7 +10,7 @@ exports.showUser = function(req, res) {
     db.User.find({
         where: { id: req.params.id },
         include: [db.Group]
-    }).success(function(user) {
+    }).then(function(user) {
         if (req.session.user.id && req.params.id != req.session.user.id) db.Audit.build({
             action: 'view',
             UserId: res.locals.session.user.id,
@@ -20,7 +20,7 @@ exports.showUser = function(req, res) {
         }).save();
         context.user = user;
         res.render('../core/profile/views/view', context);
-    }).error(function(err) {
+    }).catch(function(err) {
         res.render('error', {
             err: err,
             message: 'Database Error'

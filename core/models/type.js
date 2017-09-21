@@ -112,13 +112,13 @@ module.exports = function(sequelize, DataTypes) {
             defaultValue: 'Expire'
         }
     };
-    return sequelize.define('Type', definition, {
+    return sequelize.define('type', definition, {
         classMethods: {
             getDefinition: function() {
                 return definition;
             },
             associate: function(models) {
-                models.Type.hasMany(models.Group, { through: 'Group_access_Types', onDelete: 'cascade', hooks: true });
+                models.Type.belongsToMany(models.Group, { through: 'Group_access_Types', onDelete: 'cascade', hooks: true });
             }
         }
     });

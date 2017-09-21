@@ -1,7 +1,7 @@
-var db = require('../models')
-    async = require('async');
+var db = require('./core/models')
+async = require('async');
 
-var insertTypes = function(){
+var insertTypes = function() {
     db.Type.build({
         name: 'Issue',
         icon: 'glyphicon glyphicon-warning-sign'
@@ -35,7 +35,7 @@ var insertTypes = function(){
         icon: 'glyphicon glyphicon-briefcase'
     }).save();
 };
-var insertPermissions = function(){
+var insertPermissions = function() {
     db.Permission.build({
         name: '<i class="glyphicon glyphicon-cog"></i> Configure',
         uri: '/admin/config',
@@ -62,35 +62,37 @@ var insertPermissions = function(){
         action: true
     }).save();
 };
-var insertGroups = function(){
+var insertGroups = function() {
     db.Group.build({
-        name: 'Super Admin'
-    }).save()
-    .success(function(group){
-        async.auto({
-            type: function(next) {
-                db.Type.findAll({
-                    where: {deleted: 0},
-                    attributes: ['id', 'name', 'icon']
-                }).complete(next);
-            },
-            permission: function(next) {
-                db.Permission.findAll({
-                    attributes: ['id', 'name', 'action']
-                }).complete(next);
-            }
-        }, function(err, results) {
-            if (!err) {
-                group.setTypes(results.type);
-                group.setPermissions(results.permission);
-            }
+            name: 'Super Admin'
+        }).save()
+        .then(function(group) {
+            async.auto({
+                type: function(next) {
+                    db.Type.findAll({
+                        where: {
+                            deleted: 0
+                        },
+                        attributes: ['id', 'name', 'icon']
+                    }).then(next);
+                },
+                permission: function(next) {
+                    db.Permission.findAll({
+                        attributes: ['id', 'name', 'action']
+                    }).then(next);
+                }
+            }, function(err, results) {
+                if (!err) {
+                    group.setTypes(results.type);
+                    group.setPermissions(results.permission);
+                }
+            });
         });
-    });
     db.Group.build({
         name: 'User'
     }).save();
 };
-var insertStage = function(){
+var insertStage = function() {
     db.Stage.build({
         name: 'Open',
         system: true
@@ -112,7 +114,7 @@ var insertStage = function(){
         system: true
     }).save();
 };
-var insertResolution = function(){
+var insertResolution = function() {
     db.Resolution.build({
         name: 'Unresolved'
     }).save();
@@ -135,7 +137,7 @@ var insertResolution = function(){
         name: 'Rejected'
     }).save();
 };
-var insertModule = function(){
+var insertModule = function() {
     db.Module.build({
         name: 'Core'
     }).save();
@@ -152,7 +154,7 @@ var insertModule = function(){
         name: 'Profile'
     }).save();
 };
-var insertPriority = function(){
+var insertPriority = function() {
     db.Priority.build({
         name: 'Critical'
     }).save();
@@ -167,11 +169,12 @@ var insertPriority = function(){
     }).save();
 };
 
-module.exports = function(req,res){
-    db.sequelize
-    .sync({ force: true })
-    .complete(function(err) {
-        if (err) throw err;
+
+db.sequelize
+    .sync({
+        force: true
+    })
+    .then(function() {
         insertTypes();
         insertPermissions();
         insertGroups();
@@ -179,6 +182,6 @@ module.exports = function(req,res){
         insertResolution();
         insertModule();
         insertPriority();
+
+        //process.exit(0);
     });
-    res.redirect('/auth/login');
-}

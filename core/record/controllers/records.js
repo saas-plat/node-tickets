@@ -7,7 +7,7 @@ exports.getUserRecords = function(req, res) {
         task: function(next) {
             db.Type.find({
                 where: { name : "Task" }
-            }).complete(next);
+            }).then(function(data){next(null,data)}).catch(next);
         },
         tasks: function(next) {
             db.Record.findAll({
@@ -29,12 +29,12 @@ exports.getUserRecords = function(req, res) {
                     model: db.User,
                     attributes: ['id', 'name']
                 }]
-            }).complete(next);
+            }).then(function(data){next(null,data)}).catch(next);
         },
         issue: function(next) {
             db.Type.find({
                 where: { name : "Issue" }
-            }).complete(next);
+            }).then(function(data){next(null,data)}).catch(next);
         },
         issues: function(next) {
             db.Record.findAll({
@@ -56,7 +56,7 @@ exports.getUserRecords = function(req, res) {
                     model: db.User,
                     attributes: ['id', 'name']
                 }]
-            }).complete(next);
+            }).then(function(data){next(null,data)}).catch(next);
         }
     }, function(err, results) {
         if (err) {
@@ -83,7 +83,7 @@ exports.getRecordType = function(req, res) {
                 where: {
                     name: req.params.name
                 }
-            }).complete(next);
+            }).then(function(data){next(null,data)}).catch(next);
         }
     }, function(err, results) {
         if (err) {
@@ -101,7 +101,7 @@ exports.getRecordType = function(req, res) {
 exports.getRecordTypes = function(req, res) {
     async.auto({
         types: function(next) {
-            db.Type.findAll().complete(next);
+            db.Type.findAll().then(function(data){next(null,data)}).catch(next);
         }
     }, function(err, results) {
         if (err) {

@@ -17,7 +17,7 @@ module.exports = function(sequelize, DataTypes) {
             defaultValue: false
         }
     };
-    return sequelize.define('Stage', definition, {
+    return sequelize.define('stage', definition, {
         classMethods: {
             getDefinition: function() {
                 return definition;

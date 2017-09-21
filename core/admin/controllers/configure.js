@@ -20,19 +20,19 @@ exports.saveType = function(req, res) {
         properties = {},
         fields = db.Type.getDefinition();
 
-    db.Type.find(req.body.TypeId).success(function(type){
+    db.Type.findById(req.body.TypeId).then(function(type){
         Object.keys(fields).forEach(function(index) {
             if (['TypeId','id'].indexOf(index) === -1)
-            this[index] = (req.body.hasOwnProperty(index) ? req.body[index] : ('TINYINT(1)' === fields[index].type ? 0 : type[index] || null ));
+            this[index] = req.body[index] || ('TINYINT(1)' === fields[index].type ? 0 : type[index] || null );
         }, properties);
 
-        if (type) type.updateAttributes(properties).success(function(){
+        if (type) type.updateAttributes(properties).then(function(){
             req.session.success = 'Saved ' + type.name;
-        }).error(function(err){
+        }).catch(function(err){
             error(err);
         });
-        error('type not found');
-    }).error(function(err){
+        else error('type not found');
+    }).catch(function(err){
         error(err);
     });
 };

@@ -6,6 +6,9 @@ var express    = require('express'),
     CONF       = require('config'),
     viewHelper = require('./hbsHelpers'),
     appTools   = require('./middleware');
+var cookieParser = require('cookie-parser');
+var bodyParser = require('body-parser');
+var methodOverride = require('method-override');
 
 exports.setup = function(app) {
 
@@ -15,10 +18,12 @@ exports.setup = function(app) {
   app.set('view engine', 'hbs');
   app.engine('hbs', hbs.__express);
 
-  app.use(express.bodyParser());
-  app.use(express.methodOverride());
+  app.use(bodyParser.urlencoded({
+    extended: false
+  }));
+  app.use(methodOverride());
   app.use(express.query());
-  app.use(express.cookieParser(CONF.app.cookie_secret));
+  app.use(cookieParser(CONF.app.cookie_secret));
   app.use(express.session({ secret: CONF.app.session_secret, key: 'connect.sid', store: new ClusterStore() }));
   viewHelper.loadCoreHelpers();
   //app.use(express.responseTime());
@@ -35,13 +40,14 @@ exports.setup = function(app) {
     var root_dir = require('path').dirname(module.parent.filename);
     pub_dir = root_dir + pub_dir;
 
-    app.use(require('less-middleware')({ src: pub_dir }));
+    //app.use(require('less-middleware')({ src: pub_dir }));
     app.use(express.static(pub_dir));
     app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
   }
 
     //---- ensure login
-    app.use('/setup', require('./schema'));
+    // 移除到install.js
+    //app.use('/setup', require('./schema'));
 
     //---- ensure login
     app.get('/', function(req, res){
